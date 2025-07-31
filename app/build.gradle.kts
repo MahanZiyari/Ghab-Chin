@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.fragment)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -88,7 +89,7 @@ dependencies {
     implementation ("com.jakewharton.timber:timber:5.0.1")
     // Calligraphy
     implementation ("io.github.inflationx:calligraphy3:3.1.1")
-    implementation ("io.github.inflationx:viewpump:2.1.1")
+    implementation ("io.github.inflationx:viewpump:2.0.3")
     // Shimmer
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
     implementation ("com.github.omtodkar:ShimmerRecyclerView:v0.4.1")
