@@ -6,7 +6,7 @@ const val CONNECTION_TIME = 60L
 const val PING_INTERVAL = 3L
 
 //Auth
-const val API_KEY = "D288jsPeeSIRhl5PpjEiVB13meY2EeKLuD_yFF5Rg3g"
+const val API_KEY = "nFdHECifxHs_vCORAn6_HbSWR2mXQJPZgK9--u2xLhc"
 const val AUTHORIZATION = "Authorization"
 const val CLIENT_ID = "Client-ID"
 const val ACCEPT_VERSION = "Accept-Version"

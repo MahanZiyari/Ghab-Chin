@@ -7,10 +7,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ir.mahan.ghabchin.data.network.ApiServices
+import ir.mahan.ghabchin.util.ACCEPT_VERSION
+import ir.mahan.ghabchin.util.API_KEY
+import ir.mahan.ghabchin.util.AUTHORIZATION
 import ir.mahan.ghabchin.util.BASE_URL
+import ir.mahan.ghabchin.util.CLIENT_ID
 import ir.mahan.ghabchin.util.CONNECTION_TIME
 import ir.mahan.ghabchin.util.NAMED_PING
 import ir.mahan.ghabchin.util.PING_INTERVAL
+import ir.mahan.ghabchin.util.V1
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -48,8 +53,9 @@ object NetworkModule {
 
         .addInterceptor { chain ->
             chain.proceed(chain.request().newBuilder().also {
-                // TODO: add headers
-            }.build())
+                it.addHeader(AUTHORIZATION, "$CLIENT_ID $API_KEY")
+                it.addHeader(ACCEPT_VERSION, V1)
+            }.build())// end of proceed
         }.also { client ->
             client.addInterceptor(interceptor)
         }
