@@ -7,8 +7,11 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ir.mahan.ghabchin.R
 import ir.mahan.ghabchin.databinding.FragmentSplashBinding
+import ir.mahan.ghabchin.util.SPLASH_DELAY
 import ir.mahan.ghabchin.util.base.BaseFragment
 import ir.mahan.ghabchin.util.loadImage
 import ir.mahan.ghabchin.util.network.Wrapper
@@ -59,15 +62,16 @@ class SplashFragment : BaseFragment<FragmentSplashBinding>() {
                         }
                         // Navigate with delay
                         lifecycleScope.launch {
-                            delay(3500)
+                            delay(SPLASH_DELAY)
                             loading.isVisible = false
-                            Toast.makeText(requireContext(), "BOOOOOO", Toast.LENGTH_SHORT).show()
-                            // TODO: Navigate to HomeScreen
+                            findNavController().popBackStack(R.id.splashFragment, true)
+                            findNavController().navigate(R.id.actionToHome)
                         }
                     }
                 }
 
                 is Wrapper.Error -> {
+                    loading.isVisible = false
                     root.showSnackBar(response.message!!)
                 }
             }

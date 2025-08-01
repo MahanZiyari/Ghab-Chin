@@ -5,9 +5,20 @@
     android:id="@+id/nav_main"
     app:startDestination="@id/splashFragment">
 
+    <!--Splash Fragment-->
     <fragment
         android:id="@+id/splashFragment"
         android:name="ir.mahan.ghabchin.ui.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" />
+
+    <!--Home Fragment-->
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="ir.mahan.ghabchin.ui.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
+    <action
+        android:id="@+id/actionToHome"
+        app:destination="@id/homeFragment" />
 </navigation>
