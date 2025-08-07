@@ -10,11 +10,16 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ir.mahan.ghabchin.R
+import ir.mahan.ghabchin.data.model.home.ColorTone
+import ir.mahan.ghabchin.data.model.home.ResponseCategories
 import ir.mahan.ghabchin.data.model.home.ResponsePhotos
 import ir.mahan.ghabchin.databinding.FragmentHomeBinding
+import ir.mahan.ghabchin.ui.home.adapters.CategoriesAdapter
+import ir.mahan.ghabchin.ui.home.adapters.ColorsAdapter
 import ir.mahan.ghabchin.ui.home.adapters.LatestPhotosAdapter
 import ir.mahan.ghabchin.util.SPLASH_DELAY
 import ir.mahan.ghabchin.util.base.BaseFragment
@@ -42,6 +47,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     // Adapters
     @Inject
     lateinit var latestPhotosAdapter: LatestPhotosAdapter
+    @Inject
+    lateinit var categoriesAdapter: CategoriesAdapter
+    @Inject
+    lateinit var colorsAdapter: ColorsAdapter
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -49,10 +58,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     ///////////////////////////////////////////////////////////////////////////
     override fun FragmentHomeBinding.setupUI() {
         requireActivity().setStatusBarIconsColor(false)
+        initColorsRecycler()
+        searchInpLay.setEndIconOnClickListener {  }
     }
 
     override fun setupObservers() {
         observeLatestPhotos()
+        observeCategories()
     }
 
     private fun observeLatestPhotos() = binding.apply {
@@ -87,13 +99,58 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         }
     }
 
+    // ColorTones
+    private fun initColorsRecycler() {
+        colorsAdapter.setData(ColorTone.entries.toList().shuffled())
+        val layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.colorToneList.setupRecyclerview(layoutManager, colorsAdapter)
+        // Handling OnLick
+        colorsAdapter.setOnItemClickListener {
+            Toast.makeText(requireContext(), "ID: $it", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    // Categories
+    private fun observeCategories() = binding.apply {
+        viewModel.categories.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is Wrapper.Loading -> {
+                    newestList.showShimmer()
+                }
+
+                is Wrapper.Success -> {
+                    newestList.hideShimmer()
+                    response.data?.let {
+                        initCategoriesRecycler(it)
+                    }
+                }
+
+                is Wrapper.Error -> {
+                    newestList.hideShimmer()
+                    root.showSnackBar(response.message!!)
+                }
+            }
+        }
+    }
+
+    private fun initCategoriesRecycler(newData: List<ResponseCategories.ResponseCategoriesItem>) {
+        categoriesAdapter.setData(newData)
+        val layoutManager = GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+        binding.categoriesList.setupRecyclerview(layoutManager, categoriesAdapter)
+        // Handling OnLick
+        categoriesAdapter.setOnItemClickListener { id, title ->
+            Toast.makeText(requireContext(), "ID: $id", Toast.LENGTH_SHORT).show()
+
+        }
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // Lifecycle  Methods
     ///////////////////////////////////////////////////////////////////////////
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getLatestPhotos()
     }
 
 }
