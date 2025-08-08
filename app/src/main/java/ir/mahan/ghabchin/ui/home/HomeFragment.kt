@@ -1,19 +1,14 @@
 package ir.mahan.ghabchin.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import ir.mahan.ghabchin.R
 import ir.mahan.ghabchin.data.model.home.ColorTone
 import ir.mahan.ghabchin.data.model.home.ResponseCategories
 import ir.mahan.ghabchin.data.model.home.ResponsePhotos
@@ -21,16 +16,12 @@ import ir.mahan.ghabchin.databinding.FragmentHomeBinding
 import ir.mahan.ghabchin.ui.home.adapters.CategoriesAdapter
 import ir.mahan.ghabchin.ui.home.adapters.ColorsAdapter
 import ir.mahan.ghabchin.ui.home.adapters.LatestPhotosAdapter
-import ir.mahan.ghabchin.util.SPLASH_DELAY
 import ir.mahan.ghabchin.util.base.BaseFragment
-import ir.mahan.ghabchin.util.loadImage
 import ir.mahan.ghabchin.util.network.Wrapper
 import ir.mahan.ghabchin.util.setStatusBarIconsColor
 import ir.mahan.ghabchin.util.setupRecyclerview
 import ir.mahan.ghabchin.util.showSnackBar
 import ir.mahan.ghabchin.viewmodel.HomeViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -59,7 +50,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun FragmentHomeBinding.setupUI() {
         requireActivity().setStatusBarIconsColor(false)
         initColorsRecycler()
-        searchInpLay.setEndIconOnClickListener {  }
+        searchInpLay.setEndIconOnClickListener {
+            val query = searchEdt.text.toString()
+            val action = HomeFragmentDirections.actionToSearch(query)
+            findNavController().navigate(action)
+        }
     }
 
     override fun setupObservers() {
@@ -106,7 +101,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.colorToneList.setupRecyclerview(layoutManager, colorsAdapter)
         // Handling OnLick
         colorsAdapter.setOnItemClickListener {
-            Toast.makeText(requireContext(), "ID: $it", Toast.LENGTH_SHORT).show()
+            val action = HomeFragmentDirections.actionToSearch(it)
+            findNavController().navigate(action)
         }
     }
 
@@ -140,8 +136,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.categoriesList.setupRecyclerview(layoutManager, categoriesAdapter)
         // Handling OnLick
         categoriesAdapter.setOnItemClickListener { id, title ->
-            Toast.makeText(requireContext(), "ID: $id", Toast.LENGTH_SHORT).show()
-
+            val action = HomeFragmentDirections.actionToCategory(id, title)
+            findNavController().navigate(action)
         }
     }
 
