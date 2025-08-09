@@ -1,5 +1,6 @@
 package ir.mahan.ghabchin.data.network
 
+import ir.mahan.ghabchin.data.model.detail.ResponseDetail
 import ir.mahan.ghabchin.data.model.home.ResponseCategories
 import ir.mahan.ghabchin.data.model.home.ResponsePhotos
 import ir.mahan.ghabchin.data.model.search.ResponseSearch
@@ -25,4 +26,7 @@ interface ApiServices {
 
     @GET("search/photos")
     suspend fun searchPhotos(@Query("query") query: String, @Query("page") page: Int): Response<ResponseSearch>
+
+    @GET("photos/{id}")
+    suspend fun fetchPhotoDetail(@Path("id") id: String): Response<ResponseDetail>
 }

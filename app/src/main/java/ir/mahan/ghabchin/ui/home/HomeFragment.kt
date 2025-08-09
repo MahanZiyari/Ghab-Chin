@@ -90,6 +90,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         binding.newestList.setupRecyclerview(layoutManager, latestPhotosAdapter)
         // Handling OnLick
         latestPhotosAdapter.setOnItemClickListener {
+            val action = HomeFragmentDirections.actionToDetail(it)
+            findNavController().navigate(action)
             Toast.makeText(requireContext(), "ID: $it", Toast.LENGTH_SHORT).show()
         }
     }

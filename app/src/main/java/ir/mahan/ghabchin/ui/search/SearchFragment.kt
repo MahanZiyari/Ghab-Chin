@@ -15,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ir.mahan.ghabchin.R
 import ir.mahan.ghabchin.databinding.FragmentSearchBinding
 import ir.mahan.ghabchin.ui.category.CategoryFragmentArgs
+import ir.mahan.ghabchin.ui.home.HomeFragmentDirections
 import ir.mahan.ghabchin.util.LoadMoreAdapter
 import ir.mahan.ghabchin.util.base.BaseFragment
 import ir.mahan.ghabchin.util.setStatusBarIconsColor
@@ -65,7 +66,8 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>() {
     private fun setupAdapter() {
         searchAdapter.apply {
             setOnItemClickListener {
-                Toast.makeText(requireContext(), "ID: $it", Toast.LENGTH_SHORT).show()
+                val action = SearchFragmentDirections.actionToDetail(it)
+                findNavController().navigate(action)
             }
             addLoadStateListener { state ->
                 binding.loading.isVisible = state.source.refresh is LoadState.Loading

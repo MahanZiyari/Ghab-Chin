@@ -7,6 +7,8 @@ plugins {
     id("com.google.dagger.hilt.android")
     // Safe Args
     id("androidx.navigation.safeargs")
+    // Parcelize
+    id("kotlin-parcelize")
 }
 
 android {

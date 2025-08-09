@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ir.mahan.ghabchin.R
 import ir.mahan.ghabchin.databinding.FragmentCategoryBinding
+import ir.mahan.ghabchin.ui.home.HomeFragmentDirections
 import ir.mahan.ghabchin.util.LoadMoreAdapter
 import ir.mahan.ghabchin.util.base.BaseFragment
 import ir.mahan.ghabchin.util.setStatusBarIconsColor
@@ -61,7 +62,8 @@ class CategoryFragment : BaseFragment<FragmentCategoryBinding>() {
     private fun setupCategoryAdapter() {
         categoriesAdapter.apply {
             setOnItemClickListener {
-                Toast.makeText(requireContext(), "ID: $it", Toast.LENGTH_SHORT).show()
+                val action = CategoryFragmentDirections.actionToDetail(it)
+                findNavController().navigate(action)
             }
             addLoadStateListener { state ->
                 binding.loading.isVisible = state.source.refresh is LoadState.Loading
